@@ -1,6 +1,8 @@
 #include "signals.hpp"
 #include <iostream>
 
+using namespace ceph;
+
 // a handler are a kind of slot,, and as an implementation detail require usage of the
 // "curiously redcurring rwmplate pattern". That is the intention is for instances of
 // a class C that need to do something in reaction to a signal firing to have an is-a
