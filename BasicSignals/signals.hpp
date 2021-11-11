@@ -94,13 +94,8 @@ namespace ceph {
 				s->call(args...);
 		}
 
-		template<class T>
-		void connect(Slot<T>& t, void(T::*f)(Args... args)) {
-			t.connect(*this, f);
-		}
-
-		template<class T>
-		void connect(Slot<T>& t, const std::function<void(Args... args)>& f) {
+		template<class T, class F>
+		void connect(Slot<T>& t, F f) {
 			t.connect(*this, f);
 		}
 
@@ -133,15 +128,9 @@ namespace ceph {
 
 	public:
 
-		template<class... Args>
-		void connect(Signal<Args...>& ev, void (Receiver::*listenerMethod)(Args... args)) {
+		template<class F, class... Args>
+		void connect(Signal<Args...>& ev, F listenerMethod) {
 			ev.addSubscriber(new details::Subscriber<Receiver, Args...>(static_cast<Receiver*>(this), listenerMethod));
-			events.push_back(&ev);
-		}
-
-		template<class... Args>
-		void connect(Signal<Args...>& ev, const std::function<void(Args... args)>& f) {
-			ev.addSubscriber(new details::Subscriber<Receiver, Args...>(static_cast<Receiver*>(this), f));
 			events.push_back(&ev);
 		}
 
